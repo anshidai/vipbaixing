@@ -41,6 +41,8 @@ class Vipbuluo {
 					$error += 1;
 				}
 				unset($content);
+				usleep(5000);
+				
 			}
 		}
 	}
@@ -96,7 +98,7 @@ class Vipbuluo {
 			if($error >= $this->errorMax) {
 				$email_title = '采集网址内容出现错误';
 				$email_content = "采集网址内容出现错误，请及时查看 {$row['url']}";
-				sendEmail('287639598@qq.com', $email_title, $email_content);
+				//sendEmail('287639598@qq.com', $email_title, $email_content);
 				break;
 			}
 			
@@ -105,6 +107,14 @@ class Vipbuluo {
 				if(preg_match('/<dl id=\"title\"><h1>(.*)<\/h1>/', $html, $title_match)) {
 					$data['title'] = strip_tags(trim($title_match[1]));
 					$data['title'] = str_replace(array('老冰棍分享网','vip部落账号网','老冰棍','VIP部落','vip部落','VIP分享网','vip部落分享网','vip账号网'), 'vip百姓网', $data['title']);
+				
+					$title = explode(' ', $data['title']);
+					if(count($title)>1) {
+						$data['title'] = str_replace($title[0], '', $data['title']);
+						$data['title'] = $data['title'].' '.$title[0].' ';
+					}
+					$data['title'] = trim($data['title']);
+				
 				}
 				if(preg_match('/<p>(.*)\| 作者/', $html, $pushtime_match)) {
 					$data['pushtime'] = strip_tags(trim($pushtime_match[1]));

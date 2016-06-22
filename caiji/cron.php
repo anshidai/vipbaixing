@@ -27,12 +27,6 @@ $db = & DB::object('db_mysql');
 $db->set_config($config['db']);
 $db->connect();
 
-
-sendEmail('287639598@qq.com');
-
-exit;
-
-
 if(in_array('vipbuluo', $site_type)) {
 	require 'vipbuluo.php';
 	
