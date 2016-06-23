@@ -1,17 +1,17 @@
 <?php 
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
-
 header("Content-type:text/html; charset=utf-8");
-set_time_limit(0);
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+//error_reporting(E_ALL);
 
 require 'simple_html_dom.php';
 require 'cj.class.php'; //引入采集扩展文件
 require 'mysql.class.php';
 
-$site_type = array('vipbuluo');
 
+define('ROOTPATH', substr(__FILE__, 0 , -8));
 
 //数据库配置
 $config['db'][1]['dbhost'] = 'localhost';        
@@ -27,30 +27,42 @@ $db = & DB::object('db_mysql');
 $db->set_config($config['db']);
 $db->connect();
 
-if(in_array('vipbuluo', $site_type)) {
-	require 'vipbuluo.php';
-	
-	$Vipbuluo =  new Vipbuluo();
-	
-	
-	//$Vipbuluo->cjXml('http://www.vipbuluo.com/sitemap.xml');
-	
-	$Vipbuluo->cjSiteUrl();
-	
-	$Vipbuluo->insertSiteUrl();
-	echo "url complete\r\n";
-	
-	$Vipbuluo->cjContent();
-	echo "content complete\n";
-	
-	$Vipbuluo->cjInsertDB();
-	echo "insert db complete\n";
-	
-}
 
+/*
+require 'vipbuluo.php';
+$Vipbuluo = new Vipbuluo();
 
+//$Vipbuluo->cjXml('http://www.vipbuluo.com/sitemap.xml');
 
-//echo "all complete\n";
+$Vipbuluo->cjSiteUrl();
+$Vipbuluo->insertSiteUrl();
+echo "url complete\r\n";
+
+$Vipbuluo->cjContent();
+echo "content complete\n";
+
+$Vipbuluo->cjInsertDB();
+echo "insert db complete\n";
+*/
+
+require 'vipzhanghao.php';
+$Vipzhanghao = new Vipzhanghao();
+
+$Vipzhanghao->cjUrl();
+echo "cj url complete\r\n";
+
+$Vipzhanghao->insertSiteUrl();
+echo "add url complete\r\n";
+
+$Vipzhanghao->cjContent();
+echo "cj content complete\r\n";
+
+$Vipzhanghao->cjInsertDB();
+echo "insert db complete\r\n";
+
+echo "all complete\r\n";
+
+echo "all complete\n";
 
 
 function pos_html($start_tag, $end_tag, $html = '')

@@ -35,7 +35,7 @@ class Vipbuluo {
 				
 				$content = dfile_get_contents($requst_url);
 				if(stripos($content, $requst_url)) {
-					$this->data[]['url'] = $requst_url;
+					$this->data['url'][$requst_url] = $requst_url;
 					echo "get url {$requst_url}\r\n";
 				}else {
 					$error += 1;
@@ -74,10 +74,10 @@ class Vipbuluo {
 	
 	public function insertSiteUrl()
 	{
-		if($this->data) {
-			foreach($this->data as $key=>$val) {
-				if(!DB::result_first("SELECT count(*) FROM ".DB::table('caiji')." WHERE site='{$this->site}' AND url = '{$val['url']}'")) {
-					DB::query("INSERT INTO ".DB::table('caiji')." (url,site) VALUES('{$val['url']}','{$this->site}')");
+		if($this->data['url']) {
+			foreach($this->data['url'] as $key=>$val) {
+				if(!DB::result_first("SELECT count(*) FROM ".DB::table('caiji')." WHERE site='{$this->site}' AND url = '{$val}'")) {
+					DB::query("INSERT INTO ".DB::table('caiji')." (url,site) VALUES('{$val}','{$this->site}')");
 					
 					$insert_id = DB::insert_id();
 
@@ -181,7 +181,8 @@ class Vipbuluo {
 				
 				$data['post_content'] = trim($row['content']); //内容
 				$data['post_title'] = htmlspecialchars(trim($row['title'])); //标题
-				$data['post_date'] = trim($row['pushtime']);
+				//$data['post_date'] = trim($row['pushtime']);
+				$data['post_date'] = date('Y-m-d H:i:s');
 				$data['post_author'] = 1; //作者ID
 				$data['post_excerpt'] = ''; //文章摘要
 				$data['ping_status'] = 'publish';  //状态 
@@ -205,6 +206,7 @@ class Vipbuluo {
 				DB::query("UPDATE ".DB::table('caiji')." SET status=2 WHERE id='{$row['id']}'");
 				
 				echo "insert {$insert_id}\r\n";
+				sleep(1);
 			}
 		}
 	}
