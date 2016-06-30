@@ -236,7 +236,10 @@ class Vipzhanghao {
 	
 	protected function getRandDesc($content, $site = 'qita')
 	{
-
+		$rand = rand(1, 4);
+        if($rand == 4) {
+            return $content; 
+        }
 		$fore = DB::fetch_first("SELECT content FROM ".DB::table('rand_desc')." WHERE site='{$site}' AND position=1 order by rand() LIMIT 1");
 		$last = DB::fetch_first("SELECT content FROM ".DB::table('rand_desc')." WHERE site='all' AND position=2 order by rand() LIMIT 1");
 		
